@@ -35,12 +35,12 @@ class MainScreen extends StatelessWidget {
                               color: Colors.yellow[700],
                           )
                         ),
-                        Icon(CupertinoIcons.person_fill,
+                        const Icon(CupertinoIcons.person_fill,
                          color:Colors.white,
                         )
                       ],
                     ),
-                    SizedBox( width: 8,),
+                    const SizedBox( width: 8,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -49,7 +49,7 @@ class MainScreen extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.outline,
                         ),),
-                        Text("Jhon Doe",
+                        const Text("Jhon Doe",
                         style:TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class MainScreen extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -80,7 +80,7 @@ class MainScreen extends StatelessWidget {
                   BoxShadow(
                     blurRadius: 5,
                     color: Colors.grey.shade600,
-                    offset: Offset(3, 3)
+                    offset: const Offset(3, 3)
                   )
                 ],
                 gradient: LinearGradient(
@@ -101,22 +101,22 @@ class MainScreen extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Total Balance",
+                  const Text("Total Balance",
                     style:TextStyle(
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     )
                   ),
-                  SizedBox(height: 12,),
-                  Text("\$ 5000.00",
+                  const SizedBox(height: 12,),
+                  const Text("\$ 5000.00",
                       style:TextStyle(
                     fontSize: 40,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                   ),
-                  SizedBox(height: 12,),
+                  const SizedBox(height: 12,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 12),
                     child: Row(
@@ -127,11 +127,11 @@ class MainScreen extends StatelessWidget {
                             Container(
                               width: 25,
                               height: 25,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.white30,
                                 shape: BoxShape.circle
                               ),
-                              child: Center(
+                              child: const Center(
                                child: Icon(
                                    CupertinoIcons.arrow_up,
                                  size: 16,
@@ -141,8 +141,8 @@ class MainScreen extends StatelessWidget {
                               ),
 
                             ),
-                            SizedBox(width: 8),
-                            Column(
+                            const SizedBox(width: 8),
+                            const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text("Income",
@@ -168,11 +168,11 @@ class MainScreen extends StatelessWidget {
                             Container(
                               width: 25,
                               height: 25,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Colors.white30,
                                   shape: BoxShape.circle
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Icon(
                                   CupertinoIcons.arrow_down,
                                   size: 14,
@@ -181,8 +181,8 @@ class MainScreen extends StatelessWidget {
                               ),
 
                             ),
-                            SizedBox(width: 8),
-                            Column(
+                            const SizedBox(width: 8),
+                            const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text("Expense",
@@ -210,11 +210,11 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 40,),
+            const SizedBox(height: 40,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:[
-                Text("Transactions",
+                const Text("Transactions",
                 style:TextStyle(
                   fontSize:16,
                   // color:Theme.of(context).colorScheme.onBackground,
@@ -287,10 +287,10 @@ class MainScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 14),
+                                const SizedBox(width: 14),
                                 Text(
                                   "\$${expenses[i].amount}.00",
-                                  style:TextStyle(
+                                  style:const TextStyle(
                                     fontSize:16,
                                     color: Colors.white,
                                     fontWeight:FontWeight.w500,

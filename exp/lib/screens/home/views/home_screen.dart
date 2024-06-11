@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
             //backgroundColor: Colors.white,
             backgroundColor: Colors.grey[800],
-            body: index == 0 ? MainScreen(state.expenses) : StatScreen(),
+            body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
             bottomNavigationBar: ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
               child: BottomNavigationBar(
                 onTap: (value) {
                   setState(() {
@@ -48,11 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 items: [
                   BottomNavigationBarItem(
                     icon: index == 0
-                        ? Icon(
+                        ? const Icon(
                             Icons.home_filled,
                             size: 26,
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.home,
                             size: 26,
                           ),
@@ -60,8 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   BottomNavigationBarItem(
                     icon: index == 1
-                        ? Icon(CupertinoIcons.graph_square_fill)
-                        : Icon(CupertinoIcons.graph_square),
+                        ? const Icon(CupertinoIcons.graph_square_fill)
+                        : const Icon(CupertinoIcons.graph_square),
                     label: "stats",
                   )
                 ],
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ],
-                          child: AddExpense(),
+                          child: const AddExpense(),
                         ),
                       ));
                   if (newExpense != null) {
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   }
                 },
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 child: Container(
                   width: 70,
                   height: 70,
@@ -119,14 +119,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       transform: const GradientRotation(pi / 4),
                     ),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     CupertinoIcons.add,
                     color: Colors.white,
                     size: 28,
                   ),
                 )));
       } else {
-        return Scaffold(
+        return const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
           ),

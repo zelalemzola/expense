@@ -74,14 +74,14 @@ class _AddExpenseState extends State<AddExpense> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: TextFormField(
                           controller: expenseController,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.grey[900],
@@ -96,14 +96,14 @@ class _AddExpenseState extends State<AddExpense> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       TextFormField(
                         readOnly: true,
                         onTap: () {},
                         controller: categoryController,
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: expense.category == Category.empty
@@ -123,7 +123,6 @@ class _AddExpenseState extends State<AddExpense> {
                               onPressed: () async {
                                 var newCategory =
                                     await getCategoryCreation(context);
-                                print(newCategory);
                                 setState(() {
                                   state.categories.insert(0, newCategory);
                                 });
@@ -134,14 +133,14 @@ class _AddExpenseState extends State<AddExpense> {
                                     color: Colors.yellow[800],
                                     size: 24,)
                                   
-                                : Icon(
+                                : const Icon(
                                     CupertinoIcons.plus_circle_fill,
                                     color: Colors.black,
                                     size: 24,)),
 
                           hintText: "Category",
                           hintStyle: TextStyle(color: Colors.grey[700]),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(12)),
                               borderSide: BorderSide.none),
@@ -186,7 +185,7 @@ class _AddExpenseState extends State<AddExpense> {
                                   );
                                 })),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       TextFormField(
@@ -199,7 +198,7 @@ class _AddExpenseState extends State<AddExpense> {
                               initialDate: expense.date,
                               firstDate: DateTime.now(),
                               lastDate:
-                                  DateTime.now().add(Duration(days: 365)));
+                                  DateTime.now().add(const Duration(days: 365)));
                           if (newDate != null) {
                             setState(() {
                               dateController.text =
@@ -209,7 +208,7 @@ class _AddExpenseState extends State<AddExpense> {
                             });
                           }
                         },
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[900],
@@ -225,14 +224,14 @@ class _AddExpenseState extends State<AddExpense> {
                               borderSide: BorderSide.none),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       SizedBox(
                         width: double.infinity,
                         height: kToolbarHeight,
                         child: isLoading
-                            ? Center(child: CircularProgressIndicator())
+                            ? const Center(child: CircularProgressIndicator())
                             : TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -249,7 +248,7 @@ class _AddExpenseState extends State<AddExpense> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(12))),
-                                child: Text(
+                                child: const Text(
                                   "Save",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 20),
@@ -260,7 +259,7 @@ class _AddExpenseState extends State<AddExpense> {
                   ),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }

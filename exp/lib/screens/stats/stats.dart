@@ -13,7 +13,7 @@ class StatScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text("Transaction",
+             const Text("Transaction",
              style:TextStyle(
                fontSize: 22,
                fontWeight: FontWeight.bold,
@@ -21,7 +21,7 @@ class StatScreen extends StatelessWidget {
 
              ) ,
              ),
-            SizedBox(height:20),
+            const SizedBox(height:20),
             Container(
               width: MediaQuery.of(context).size.width,
               height:MediaQuery.of(context).size.width/1.3 ,
@@ -30,8 +30,8 @@ class StatScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
 
               ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12,20,12,12),
+              child: const Padding(
+                padding: EdgeInsets.fromLTRB(12,20,12,12),
                 child: MyChart(),
               )
 

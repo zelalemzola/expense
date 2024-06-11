@@ -72,10 +72,10 @@ class _MyChartState extends State<MyChart> {
     return BarChartData(
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: AxisTitles(
+        rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false)
         ),
-        topTitles: AxisTitles(
+        topTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false)
         ),
         bottomTitles: AxisTitles(
@@ -99,7 +99,7 @@ class _MyChartState extends State<MyChart> {
         borderData:FlBorderData(
           show: false
         ),
-      gridData: FlGridData(
+      gridData: const FlGridData(
         show: false
 
       ),

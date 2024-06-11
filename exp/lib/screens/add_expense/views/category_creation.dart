@@ -44,7 +44,7 @@ Future getCategoryCreation(BuildContext context) {
                   }
                 },
                 child: AlertDialog(
-                  title: Center(
+                  title: const Center(
                     child: Text(
                       "Create a Category",
                       style: TextStyle(
@@ -61,7 +61,7 @@ Future getCategoryCreation(BuildContext context) {
                         width: MediaQuery.of(context).size.width,
                         child: TextFormField(
                           controller: categoryNameController,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.grey[900],
@@ -74,7 +74,7 @@ Future getCategoryCreation(BuildContext context) {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       TextFormField(
@@ -85,20 +85,20 @@ Future getCategoryCreation(BuildContext context) {
                             isExpanded = !isExpanded;
                           });
                         },
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[900],
                           isDense: true,
                           hintText: "Icon",
-                          suffixIcon: Icon(
+                          suffixIcon: const Icon(
                             CupertinoIcons.chevron_down,
                             size: 12,
                           ),
                           hintStyle: TextStyle(color: Colors.grey[700]),
                           border: OutlineInputBorder(
                               borderRadius: isExpanded
-                                  ? BorderRadius.vertical(
+                                  ? const BorderRadius.vertical(
                                       top: Radius.circular(12))
                                   : BorderRadius.circular(12),
                               borderSide: BorderSide.none),
@@ -108,14 +108,14 @@ Future getCategoryCreation(BuildContext context) {
                           ? Container(
                               width: MediaQuery.of(context).size.width,
                               height: 200,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(12)),
                               ),
                               child: GridView.builder(
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 3,
                                   mainAxisSpacing: 5,
                                   crossAxisSpacing: 5,
@@ -153,8 +153,8 @@ Future getCategoryCreation(BuildContext context) {
                                 },
                               ),
                             )
-                          : SizedBox(),
-                      SizedBox(
+                          : const SizedBox(),
+                      const SizedBox(
                         height: 16,
                       ),
                       TextFormField(
@@ -209,7 +209,7 @@ Future getCategoryCreation(BuildContext context) {
                         },
                         textAlignVertical: TextAlignVertical.center,
                         readOnly: true,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: categoryColor,
@@ -228,7 +228,7 @@ Future getCategoryCreation(BuildContext context) {
                         width: double.infinity,
                         height: 50,
                         child: isLoading == true
-                            ? Center(
+                            ? const Center(
                                 child: CircularProgressIndicator(),
                               )
                             : TextButton(

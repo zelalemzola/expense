@@ -46,6 +46,8 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   uuid: ^4.3.3
 
+  flutter_lints: ^2.0.0
+
   expense_repository: 
     path: packages/expense_repository
 

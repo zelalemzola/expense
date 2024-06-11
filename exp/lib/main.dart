@@ -7,13 +7,10 @@ import "simple_bloc_observer.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print('Initializing Firebase...');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print('Firebase initialized');
   Bloc.observer = SimpleBlocObserver();
-  print('Bloc observer set');
   runApp(const MyApp());
 }
 

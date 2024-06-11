@@ -15,9 +15,9 @@ class MyAppView extends StatelessWidget {
       theme:ThemeData(
         colorScheme: ColorScheme.light(
           onBackground: Colors.black,
-          primary: Color(0xff00b2e7),
-          secondary: Color(0xffe064f7),
-          tertiary: Color(0xffff8d6c),
+          primary: const Color(0xff00b2e7),
+          secondary: const Color(0xffe064f7),
+          tertiary: const Color(0xffff8d6c),
           outline:Colors.grey[400],
         )
       ),
@@ -25,7 +25,7 @@ class MyAppView extends StatelessWidget {
         create: (context) => GetExpensesBloc(
           FirebaseExpenseRepo()
         )..add(GetExpenses()),
-        child: HomeScreen(),
+        child: const HomeScreen(),
       ),
     );
   }
