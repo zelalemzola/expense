@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyChart extends StatefulWidget {
@@ -24,24 +23,10 @@ class _MyChartState extends State<MyChart> {
         barRods: [
           BarChartRodData(
               toY: y,
-          //     gradient: LinearGradient(
-          //   colors: [
-          //     Theme.of(context).colorScheme.primary,
-          //     Theme.of(context).colorScheme.secondary,
-          //     Theme.of(context).colorScheme.tertiary,
-          //   ],
-          //   transform: const GradientRotation( pi / 40 ),
-          //
-          //
         gradient: LinearGradient(
             colors:[
-              // Theme.of(context).colorScheme.primary,
-              // Theme.of(context).colorScheme.secondary,
-              // Theme.of(context).colorScheme.tertiary,
-
               Colors.yellow.shade800,
               Colors.grey.shade800,
-
             ],
             transform: const GradientRotation( pi / 4),
           ),
@@ -49,7 +34,6 @@ class _MyChartState extends State<MyChart> {
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
                 toY:5,
-
                 color: Colors.white
               )
 

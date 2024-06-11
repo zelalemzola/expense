@@ -1,12 +1,10 @@
-import "dart:math";
-
-import "package:exp/screens/add_expense/blocs/create_categorybloc/create_category_bloc.dart";
+import "package:exp/screens/add_expense/blocs/create_expense_bloc/create_expense_bloc.dart";
+import "package:exp/screens/add_expense/blocs/get_categories_bloc/get_categories_bloc.dart";
+import "package:exp/screens/add_expense/views/category_creation.dart";
 import "package:expense_repository/expense_repository.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import "package:flutter_colorpicker/flutter_colorpicker.dart";
-import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:intl/intl.dart";
 import "package:uuid/uuid.dart";
 
@@ -18,11 +16,12 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
-
   TextEditingController expenseController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  DateTime selectDate = DateTime.now();
+  //DateTime selectDate = DateTime.now();
+  late Expense expense;
+  bool isLoading = false;
 
   List<String> myCategoriesIcon = [
     "entertainment",
@@ -36,362 +35,236 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    dateController.text= DateFormat('dd/MM/yyyy').format(DateTime.now());
+    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    expense = Expense.empty;
+    expense.expenseId = const Uuid().v1();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ()=> FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.grey[800],
-        appBar: AppBar(
-          backgroundColor: Colors.yellow[800],
-          title: Text("Add Expense",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.grey[800]),),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-
-              SizedBox( height: 16,),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: TextFormField(
-                  controller: expenseController,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[900],
-
-                    prefixIcon: Icon(CupertinoIcons.money_dollar,color: Colors.yellow[800],size: 24,),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox( height: 32,),
-              TextFormField(
-                readOnly: true,
-                onTap: (){
-
-                },
-                controller: categoryController,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[900],
-
-                  prefixIcon: Icon(CupertinoIcons.list_bullet,color: Colors.yellow[800],size: 24,),
-                  hintText: "Category",
-                  hintStyle: TextStyle(color: Colors.grey[700]),
-                  suffixIcon: IconButton(
-                    onPressed: (){
-                      showDialog(
-                          context: context,
-                          builder: (ctx){
-                            bool isExpanded = false;
-                            String iconSelected = '';
-                            Color categoryColor = const Color.fromRGBO(33, 33, 33, 1);
-                            TextEditingController categoryNameController = TextEditingController();
-                            TextEditingController categoryIconController = TextEditingController();
-                            TextEditingController categoryColorController = TextEditingController();
-
-                            return StatefulBuilder(
-                              builder:(ctx,setState) {
-                                return AlertDialog(
-                                title:Center(
-                                  child:Text("Create a Category",
-                                  style: TextStyle(
-                                    color:Colors.white,
-
-                                  ),
+    return BlocListener<CreateExpenseBloc, CreateExpenseState>(
+      listener: (context, state) {
+        if (state is CreateExpenseSuccess) {
+          Navigator.pop(context, expense);
+        } else if (state is CreateExpenseLoading) {
+          setState(() {
+            isLoading = true;
+          });
+        }
+      },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: Colors.grey[800],
+          appBar: AppBar(
+            backgroundColor: Colors.yellow[800],
+            title: Text(
+              "Add Expense",
+              style: TextStyle(
+                  fontWeight: FontWeight.w600, color: Colors.grey[800]),
+            ),
+            centerTitle: true,
+          ),
+          body: BlocBuilder<GetCategoriesBloc, GetCategoriesState>(
+            builder: (context, state) {
+              if (state is GetCategoriesSuccess) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: TextFormField(
+                          controller: expenseController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey[900],
+                            prefixIcon: Icon(
+                              CupertinoIcons.money_dollar,
+                              color: Colors.yellow[800],
+                              size: 24,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      TextFormField(
+                        readOnly: true,
+                        onTap: () {},
+                        controller: categoryController,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: expense.category == Category.empty
+                              ? Colors.grey[900]
+                              : Color(expense.category.color),
+                          prefixIcon: expense.category == Category.empty 
+                              ? Icon(
+                                  CupertinoIcons.list_bullet,
+                                  color: Colors.yellow[800],
+                                  size: 24,
+                                )
+                              : Image.asset(
+                                  'images/${expense.category.icon}.png',
+                                  scale: 2,
                                 ),
-                                ),
-
-                                backgroundColor: Colors.grey[800],
-                                surfaceTintColor:Colors.black ,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-
-                                    SizedBox(
-                                      width:MediaQuery.of(context).size.width,
-                                      child: TextFormField(
-                                        controller: categoryNameController,
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: Colors.grey[900],
-                                          isDense:true,
-
-                                          hintText: "Name",
-                                          hintStyle: TextStyle(color: Colors.grey[700]),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(12),
-                                              borderSide: BorderSide.none
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 16,),
-                                    TextFormField(
-                                      controller: categoryIconController,
-                                      readOnly:true,
-                                      onTap:(){
-                                          setState((){
-                                              isExpanded = !isExpanded;
-                                                     }
-                                                     );
-                                               },
-                                      style: TextStyle(color: Colors.white),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.grey[900],
-                                        isDense:true,
-                                        hintText: "Icon",
-                                        suffixIcon: Icon(CupertinoIcons.chevron_down,size: 12,),
-                                        hintStyle: TextStyle(color: Colors.grey[700]),
-                                        border: OutlineInputBorder(
-                                            borderRadius:isExpanded ? BorderRadius.vertical(
-                                                top: Radius.circular(12)
-                                            ):BorderRadius.circular(12),
-                                            borderSide: BorderSide.none
-                                        ),
-                                      ),
-                                    ),
-                                    isExpanded ? Container(
-
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.vertical(
-                                          bottom: Radius.circular(12)
-                                        ),
-
-                                      ),
-                                      child: GridView.builder(
-                                        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 3,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,  
-
-                                        ),
-                                        itemCount:myCategoriesIcon.length,
-                                        itemBuilder: (context,int i){
-                                          return Padding(
-
-
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: GestureDetector(
-                                              onTap:() {
-                                                setState (() {
-                                                  iconSelected = myCategoriesIcon[i];
-                                                });
-                                              },
-                                              child: Container(
-                                              
-                                                width: 50,
-                                                height: 50,
-                                                decoration: BoxDecoration(
-                                                color: Colors.grey[800],
-                                                  border: Border.all(
-                                                    width: 3,
-                                                    color: iconSelected == myCategoriesIcon[i] 
-                                                    ? Colors.blue
-                                                    : Colors.grey
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(12),
-                                                  image: DecorationImage(
-                                                    image: AssetImage("images/${myCategoriesIcon[i]}.png"),
-                                                  )
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ):SizedBox(),
-                                    SizedBox(height: 16,),
-                                    TextFormField(
-                                      controller: categoryColorController,
-                                      onTap: () {
-                                         showDialog(
-                                           context: context,
-                                           builder: (ctx2) {
-                                             return BlocProvider.value(
-                                               value: context.read<CreateCategoryBloc>(),
-                                               child: AlertDialog(
-                                                 content: Column(
-                                                   mainAxisSize: MainAxisSize.min,
-                                                   children: [
-                                                     ColorPicker(
-                                                       pickerColor: categoryColor,
-                                                       onColorChanged: (value) {
-                                                        setState(() {
-                                                          categoryColor = value;
-                                                        });
-                                                       },
-                                                     ),
-                                                     SizedBox(
-                                                        width: double.infinity,
-                                                        height: 50,
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(ctx2);
-                                                          },
-                                                          style: TextButton.styleFrom(
-                                                            backgroundColor: Colors.black,
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(12),
-                                                            ),
-                                                          ),
-                                                          child: const Text(
-                                                            'Save',
-                                                            style: TextStyle(
-                                                              fontSize: 22,
-                                                              color: Colors.white,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                   ], 
-                                                 ), 
-                                               ),
-                                             ); 
-                                           }, 
-                                         ); 
-                                       }, 
-
-                                      textAlignVertical: TextAlignVertical.center,
-                                      readOnly: true,
-
-                                      style: TextStyle(color: Colors.white),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: categoryColor,
-                                        isDense:true,
-                                        hintText: "Color",
-                                        hintStyle: TextStyle(color: Colors.grey[700]),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                            borderSide: BorderSide.none
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16,),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      height: 50,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          //Create Category object and POP
-                                          Category category = Category.empty;
-                                          category.categoryId = const Uuid().v1();
-                                          category.name = categoryNameController.text;
-                                          category.icon = iconSelected;
-                                          category.color = categoryColor.toString();
-                                          context.read<CreateCategoryBloc>().add(CreateCategory(category));
-                                          Navigator.pop(context);
-                                        },
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Save',
-                                          style: TextStyle(
-                                            fontSize: 22,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              );
+                          suffixIcon: IconButton(
+                              onPressed: () async {
+                                var newCategory =
+                                    await getCategoryCreation(context);
+                                print(newCategory);
+                                setState(() {
+                                  state.categories.insert(0, newCategory);
+                                });
                               },
-                            );
+                              icon: expense.category == Category.empty 
+                                ? Icon(
+                                    CupertinoIcons.plus_circle_fill,
+                                    color: Colors.yellow[800],
+                                    size: 24,)
+                                  
+                                : Icon(
+                                    CupertinoIcons.plus_circle_fill,
+                                    color: Colors.black,
+                                    size: 24,)),
+
+                          hintText: "Category",
+                          hintStyle: TextStyle(color: Colors.grey[700]),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(12)),
+                              borderSide: BorderSide.none),
+                        ),
+                      ),
+                      Container(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(97, 97, 97, 1),
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(12)),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                                itemCount: state.categories.length,
+                                itemBuilder: (context, int i) {
+                                  return Card(
+                                    child: ListTile(
+                                      onTap: () {
+                                        setState(() {
+                                          expense.category =
+                                              state.categories[i];
+                                          categoryController.text =
+                                              expense.category.name;
+                                        });
+                                      },
+                                      leading: Image.asset(
+                                        'images/${state.categories[i].icon}.png',
+                                        scale: 2,
+                                      ),
+                                      title: Text(
+                                        state.categories[i].name,
+                                      ),
+                                      tileColor:
+                                          Color(state.categories[i].color),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                    ),
+                                  );
+                                })),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      TextFormField(
+                        controller: dateController,
+                        textAlignVertical: TextAlignVertical.center,
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: expense.date,
+                              firstDate: DateTime.now(),
+                              lastDate:
+                                  DateTime.now().add(Duration(days: 365)));
+                          if (newDate != null) {
+                            setState(() {
+                              dateController.text =
+                                  DateFormat('dd/MM/yyyy').format(newDate);
+                              //selectDate = newDate;
+                              expense.date = newDate;
+                            });
                           }
-                      );
-                    },
-                   icon:Icon(
-                     CupertinoIcons.plus_circle_fill,
-                     color: Colors.yellow[800],
-                     size: 24,
-                   )
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none
-                  ),
-                ),
-              ),
-              SizedBox( height: 16,),
-              TextFormField(
-                controller: dateController,
-                textAlignVertical: TextAlignVertical.center,
-                readOnly: true,
-                onTap: () async {
-                  DateTime? newDate = await showDatePicker(
-                      context: context,
-                      initialDate: selectDate,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(Duration(days: 365))
+                        },
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[900],
+                          prefixIcon: Icon(
+                            CupertinoIcons.calendar_badge_plus,
+                            color: Colors.yellow[800],
+                            size: 24,
+                          ),
+                          hintText: "Date",
+                          hintStyle: TextStyle(color: Colors.grey[700]),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: kToolbarHeight,
+                        child: isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    expense.amount =
+                                        int.parse(expenseController.text);
+                                  });
 
-                  );
-                  if(newDate != null){
-                    setState(() {
-                      dateController.text= DateFormat('dd/MM/yyyy').format(newDate);
-                      selectDate = newDate;
-                    });
-                  }
-                },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[900],
-
-                  prefixIcon: Icon(CupertinoIcons.calendar_badge_plus,color: Colors.yellow[800],size: 24,),
-                  hintText: "Date",
-                  hintStyle: TextStyle(color: Colors.grey[700]),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none
-                  ),
-                ),
-              ),
-              SizedBox( height: 16,),
-              SizedBox(
-
-                width: double.infinity,
-                height: kToolbarHeight,
-                child: TextButton(
-
-                    onPressed: (){},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)
+                                  context
+                                      .read<CreateExpenseBloc>()
+                                      .add(CreateExpense(expense));
+                                },
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12))),
+                                child: Text(
+                                  "Save",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
                       )
-                    ),
-                  child: Text("Save",
-                    style: TextStyle(color: Colors.white,fontSize: 20),
+                    ],
                   ),
-
-                ),
-              )
-            ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),

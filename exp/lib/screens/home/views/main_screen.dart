@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:exp/data/data.dart';
+import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  final List<Expense> expenses;
+  const MainScreen(this.expenses, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +240,7 @@ class MainScreen extends StatelessWidget {
             const SizedBox(height: 20,),
             Expanded(
               child: ListView.builder(
-                itemCount: transactionsData.length,
+                itemCount: expenses.length,
                 itemBuilder: (context,int i){
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
@@ -274,20 +276,22 @@ class MainScreen extends StatelessWidget {
                                       width: 50,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: transactionsData[i]['color'],
+                                        color: Color(expenses[i].category.color),
                                         shape: BoxShape.circle
                                       ),
                                     ),
-                                    transactionsData[i]['icon'],
-
-
+                                    Image.asset(
+                                      'images/${expenses[i].category.icon}.png',
+                                      scale: 2,
+                                      color: Colors.white,
+                                    ),
                                   ],
                                 ),
-                                SizedBox(width: 14,),
-                                Text(transactionsData[i]['name'],
+                                SizedBox(width: 14),
+                                Text(
+                                  "\$${expenses[i].amount}.00",
                                   style:TextStyle(
                                     fontSize:16,
-                                    // color:Theme.of(context).colorScheme.onBackground,
                                     color: Colors.white,
                                     fontWeight:FontWeight.w500,
                                   ),
@@ -301,14 +305,12 @@ class MainScreen extends StatelessWidget {
                                 Text(transactionsData[i]['totalAmount'],
                                   style:TextStyle(
                                     fontSize:14,
-                                    // color:Theme.of(context).colorScheme.onBackground,
-                                    // color:Theme.of(context).colorScheme.outline,
                                     color:Colors.yellow[800],
                                     fontWeight:FontWeight.w400,
                                   ),
                                 ),
-
-                                Text(transactionsData[i]['date'],
+                                Text(
+                                  DateFormat('dd/MM/yyyy').format(expenses[i].date),
                                   style:TextStyle(
                                     fontSize:14,
                                     color:Theme.of(context).colorScheme.outline,
