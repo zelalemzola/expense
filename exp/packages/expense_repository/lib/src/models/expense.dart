@@ -4,7 +4,7 @@ class Expense {
   String expenseId;
   Category category;
   DateTime date;
-  int amount;
+  double amount;
 
   Expense({
     required this.expenseId,

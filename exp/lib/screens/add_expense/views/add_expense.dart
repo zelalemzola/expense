@@ -22,6 +22,7 @@ class _AddExpenseState extends State<AddExpense> {
   //DateTime selectDate = DateTime.now();
   late Expense expense;
   bool isLoading = false;
+  int selectedIndex = -1;
 
   List<String> myCategoriesIcon = [
     "entertainment",
@@ -87,10 +88,15 @@ class _AddExpenseState extends State<AddExpense> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.grey[900],
-                              prefixIcon: Icon(
-                                CupertinoIcons.money_dollar,
-                                color: Colors.yellow[800],
-                                size: 24,
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Birr',
+                                  style: TextStyle(
+                                    color: Colors.yellow[800],
+                                    fontSize: 20,
+                                  ),
+                                ),
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
@@ -108,19 +114,12 @@ class _AddExpenseState extends State<AddExpense> {
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: expense.category == Category.empty
-                                ? Colors.grey[900]
-                                : Color(expense.category.color),
-                            prefixIcon: expense.category == Category.empty
-                                ? Icon(
-                                    CupertinoIcons.list_bullet,
-                                    color: Colors.yellow[800],
-                                    size: 24,
-                                  )
-                                : Image.asset(
-                                    'images/${expense.category.icon}.png',
-                                    scale: 2,
-                                  ),
+                            fillColor: Colors.grey[900],
+                            prefixIcon: Icon(
+                              CupertinoIcons.list_bullet,
+                              color: Colors.yellow[800],
+                              size: 24,
+                            ),
                             suffixIcon: IconButton(
                                 onPressed: () async {
                                   var newCategory =
@@ -129,19 +128,13 @@ class _AddExpenseState extends State<AddExpense> {
                                     state.categories.insert(0, newCategory);
                                   });
                                 },
-                                icon: expense.category == Category.empty
-                                    ? Icon(
-                                        CupertinoIcons.plus_circle_fill,
-                                        color: Colors.yellow[800],
-                                        size: 24,
-                                      )
-                                    : const Icon(
-                                        CupertinoIcons.plus_circle_fill,
-                                        color: Colors.black,
-                                        size: 24,
-                                      )),
+                                icon: Icon(
+                                  CupertinoIcons.plus_circle_fill,
+                                  color: Colors.yellow[800],
+                                  size: 24,
+                                )),
                             hintText: "Category",
-                            hintStyle: TextStyle(color: Colors.grey[700]),
+                            hintStyle: TextStyle(color: Colors.yellow[800]),
                             border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(12)),
@@ -167,8 +160,7 @@ class _AddExpenseState extends State<AddExpense> {
                                           setState(() {
                                             expense.category =
                                                 state.categories[i];
-                                            categoryController.text =
-                                                expense.category.name;
+                                            selectedIndex = i;
                                           });
                                         },
                                         leading: Image.asset(
@@ -181,8 +173,15 @@ class _AddExpenseState extends State<AddExpense> {
                                         tileColor:
                                             Color(state.categories[i].color),
                                         shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
+                                          side: BorderSide(
+                                            color: selectedIndex == i
+                                                ? Colors.blue
+                                                : Colors.transparent,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
                                       ),
                                     );
                                   })),
@@ -239,9 +238,9 @@ class _AddExpenseState extends State<AddExpense> {
                                   onPressed: () {
                                     setState(() {
                                       expense.amount =
-                                          int.parse(expenseController.text);
+                                          double.parse(expenseController.text);
                                     });
-                            
+
                                     context
                                         .read<CreateExpenseBloc>()
                                         .add(CreateExpense(expense));

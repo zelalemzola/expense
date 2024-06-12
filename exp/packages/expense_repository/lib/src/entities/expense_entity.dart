@@ -7,7 +7,7 @@ class ExpenseEntity {
   String expenseId;
   Category category;
   DateTime date;
-  int amount;
+  double amount;
 
   ExpenseEntity({
     required this.expenseId,
